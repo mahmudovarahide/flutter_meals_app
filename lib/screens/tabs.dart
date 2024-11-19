@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals_app/providers/favorites_provider.dart';
 import 'package:meals_app/providers/filters_provider.dart';
-import 'package:meals_app/providers/meals_provider.dart';
 import 'package:meals_app/screens/categories.dart';
 import 'package:meals_app/screens/filters.dart';
 import 'package:meals_app/screens/meals.dart';
@@ -32,7 +31,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   void _setScreen(String indentifier) async {
     Navigator.of(context).pop();
     if (indentifier == 'filters') {
-     await Navigator.of(context).push<Map<Filter, bool>>(
+      await Navigator.of(context).push<Map<Filter, bool>>(
         MaterialPageRoute(
           builder: (ctx) => const FiltersScreen(),
         ),
@@ -42,18 +41,9 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final meals = ref.watch(mealsProvider);
+    final avaibleMeals = ref.watch(filteredMealProvider);
 
-    final activeFilters=ref.watch(filterProvider);
-    final avaibleMeals = meals.where((meal) {
-      if (activeFilters[Filter.glutenFree]! && !meal.isGlutenFree) {
-        return false;
-      }
-      return true;
-    }).toList();
-
-    Widget activePage = CategoriesScreen(
-        avaibleMeals: avaibleMeals);
+    Widget activePage = CategoriesScreen(avaibleMeals: avaibleMeals);
     var activePagetTitle = 'Categories';
 
     if (_selectedPageIndex == 1) {
