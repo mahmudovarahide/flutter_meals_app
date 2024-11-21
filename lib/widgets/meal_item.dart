@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:meals_app/models/meal.dart';
 import 'package:meals_app/widgets/meal_item_trait.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class MealItem extends StatelessWidget {
-  const MealItem({super.key, required this.meal, required this.onSelectMeal});
+  const MealItem({
+    super.key,
+    required this.meal,
+    required this.onSelectMeal,
+  });
 
   final Meal meal;
-
-  final void Function( Meal meal) onSelectMeal;
+  final void Function(Meal meal) onSelectMeal;
 
   String get complexityText {
     return meal.complexity.name[0].toUpperCase() +
@@ -31,18 +33,21 @@ class MealItem extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       elevation: 2,
       child: InkWell(
-        onTap: () {
-          onSelectMeal(meal);
-        },
+        onTap: () => onSelectMeal(meal),
         child: Stack(
           children: [
-            FadeInImage(
-              placeholder: MemoryImage(kTransparentImage),
-              image: NetworkImage(meal.imageUrl),
-              fit: BoxFit.cover,
-              height: 200,
-              width: double.infinity,
+            // Image Section
+            Hero(
+              tag: meal.id,
+              child: FadeInImage(
+                placeholder: MemoryImage(kTransparentImage),
+                image: NetworkImage(meal.imageUrl),
+                fit: BoxFit.cover,
+                height: 200,
+                width: double.infinity,
+              ),
             ),
+            // Details Section
             Positioned(
               bottom: 0,
               left: 0,
@@ -53,6 +58,7 @@ class MealItem extends StatelessWidget {
                     const EdgeInsets.symmetric(vertical: 6, horizontal: 44),
                 child: Column(
                   children: [
+                    // Meal Title
                     Text(
                       meal.title,
                       maxLines: 2,
@@ -65,6 +71,7 @@ class MealItem extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 12),
+                    // Meal Traits
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -72,26 +79,22 @@ class MealItem extends StatelessWidget {
                           label: '${meal.duration} min',
                           icon: Icons.schedule,
                         ),
-                        const SizedBox(
-                          width: 6,
-                        ),
+                        const SizedBox(width: 6),
                         MealItemTrait(
                           label: complexityText,
                           icon: Icons.work,
                         ),
-                        const SizedBox(
-                          width: 6,
-                        ),
+                        const SizedBox(width: 6),
                         MealItemTrait(
                           label: affordabilityText,
                           icon: Icons.attach_money,
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

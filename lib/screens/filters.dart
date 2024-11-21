@@ -13,34 +13,46 @@ class FiltersScreen extends ConsumerWidget {
         title: const Text('Your Filters'),
       ),
       body: Column(
-        children: [
-          SwitchListTile(
-            value: activeFilters[Filter.glutenFree]!,
-            onChanged: (isChecked) {
-              ref.read(filterProvider.notifier).setFilter(
-                    Filter.glutenFree,
-                    isChecked,
-                  );
-            },
-            title: Text(
-              'Gluten-free',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium!
-                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
-            ),
-            subtitle: Text(
-              'Only includes gluten free',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
-            ),
-            activeColor: Theme.of(context).colorScheme.tertiary,
-            secondary: const Icon(Icons.set_meal_outlined),
-          )
-        ],
+        children: [SingleFilterListElement(activeFilters: activeFilters)],
       ),
+    );
+  }
+}
+
+class SingleFilterListElement extends ConsumerWidget {
+  const SingleFilterListElement({
+    super.key,
+    required this.activeFilters,
+  });
+
+  final Map<Filter, bool> activeFilters;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile(
+      value: activeFilters[Filter.glutenFree]!,
+      onChanged: (isChecked) {
+        ref.read(filterProvider.notifier).setFilter(
+              Filter.glutenFree,
+              isChecked,
+            );
+      },
+      title: Text(
+        'Gluten-free',
+        style: Theme.of(context)
+            .textTheme
+            .titleMedium!
+            .copyWith(color: Theme.of(context).colorScheme.onSurface),
+      ),
+      subtitle: Text(
+        'Only includes gluten free',
+        style: Theme.of(context)
+            .textTheme
+            .titleSmall!
+            .copyWith(color: Theme.of(context).colorScheme.onSurface),
+      ),
+      activeColor: Theme.of(context).colorScheme.tertiary,
+      secondary: const Icon(Icons.set_meal_outlined),
     );
   }
 }
